@@ -30,7 +30,7 @@
             border-radius: 8px 8px 0 0;
             text-align: center;
         }
-        .login-form, .teacher-form, .verification-form, .results, .exam-schedule {
+        .login-form, .teacher-form, .verification-form, .results {
             margin-top: 20px;
         }
         .login-form input, .teacher-form input, .verification-form input {
@@ -40,7 +40,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .login-form button, .teacher-form button, .verification-form button, .exam-schedule button {
+        .login-form button, .teacher-form button, .verification-form button {
             width: 100%;
             padding: 10px;
             background-color: #ff9800;
@@ -49,10 +49,10 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .login-form button:hover, .teacher-form button:hover, .verification-form button:hover, .exam-schedule button:hover {
+        .login-form button:hover, .teacher-form button:hover, .verification-form button:hover {
             background-color: #e68a00;
         }
-        .results .session, .teacher-form p, .exam-schedule h2 {
+        .results .session {
             background-color: #1e88e5;
             color: white;
             padding: 10px;
@@ -79,7 +79,7 @@
             font-weight: bold;
             color: #1e88e5;
         }
-        .logout-button, .exam-schedule-button {
+        .logout-button {
             width: 100%;
             padding: 10px;
             background-color: #1e88e5;
@@ -89,14 +89,8 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .logout-button:hover, .exam-schedule-button:hover {
-            background-color: #1976d2;
-        }
-        .logout-button {
-            background-color: #d32f2f;
-        }
         .logout-button:hover {
-            background-color: #c62828;
+            background-color: #1976d2;
         }
         .role-selection {
             margin-top: 20px;
@@ -214,11 +208,10 @@
                 <li>Biophysique (+ TP)<span class="course-grade-display" id="gradeDisplay2"></span></li>
                 <li>Anatomie II (+TP)<span class="course-grade-display" id="gradeDisplay3"></span></li>
                 <li>Histoire de la Médecine<span class="course-grade-display" id="gradeDisplay4"></span></li>
-             <li>Psychologie Sociologie<span class="course-grade-display" id="gradeDisplay5"></span></li>
+                <li>Psychologie Sociologie<span class="course-grade-display" id="gradeDisplay5"></span></li>
             </ul>
             <button class="logout-button" onclick="logout()">Déconnecter</button>
         </div>
-    </div>
     <script>
         function openNav() {
             document.getElementById("sidebar").style.left = "0";
@@ -263,29 +256,63 @@
         }
 
         function accessTeacherForm() {
-            // Fake teacher form access
-            alert("Accès enseignant autorisé!");
-            document.getElementById("teacher-info-form").style.display = "block";
-            document.getElementById("teacher-form").style.display = "none";
+            var password = document.getElementById("teacherPassword").value;
+            if (password === "password123") {
+                // Password is correct
+                alert("Accès enseignant autorisé!");
+                document.getElementById("teacher-info-form").style.display = "block";
+                document.getElementById("teacher-form").style.display = "none";
+            } else {
+                // Password is incorrect
+                alert("Mot de passe incorrect!");
+            }
         }
 
         function saveStudentInfo() {
-            // Fake save student info
+            // Get student information from inputs
+            var studentInfo = {
+                cne: document.getElementById("teacherStudentCne").value,
+                name: document.getElementById("teacherStudentName").value,
+                registrationNumber: document.getElementById("teacherStudentRegistrationNumber").value,
+                grades: {
+                    grade1: document.getElementById("grade1").value,
+                    grade2: document.getElementById("grade2").value,
+                    grade3: document.getElementById("grade3").value,
+                    grade4: document.getElementById("grade4").value,
+                    grade5: document.getElementById("grade5").value
+                }
+            };
+
+            // Save student information to localStorage
+            localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
+
             alert("Informations de l'étudiant enregistrées!");
         }
 
         function verifyInfo() {
-            // Fake verification function
-            alert("Vérification réussie!");
-            document.getElementById("results").style.display = "block";
-            document.getElementById("verification-form").style.display = "none";
+            // Get saved student information from localStorage
+            var studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
 
-            // Fake display grades (the same as entered by the teacher)
-            document.getElementById("gradeDisplay1").innerText = document.getElementById("grade1").value;
-            document.getElementById("gradeDisplay2").innerText = document.getElementById("grade2").value;
-            document.getElementById("gradeDisplay3").innerText = document.getElementById("grade3").value;
-            document.getElementById("gradeDisplay4").innerText = document.getElementById("grade4").value;
-            document.getElementById("gradeDisplay5").innerText = document.getElementById("grade5").value;
+            // Validate student info (this is a placeholder for actual validation)
+            if (studentInfo && 
+                document.getElementById("verifyCne").value === studentInfo.cne &&
+                document.getElementById("verifyStudentNumber").value === studentInfo.registrationNumber &&
+                document.getElementById("verifyCin").value === studentInfo.cne) {
+
+                alert("Vérification réussie!");
+
+                // Display grades
+                document.getElementById("gradeDisplay1").innerText = studentInfo.grades.grade1;
+                document.getElementById("gradeDisplay2").innerText = studentInfo.grades.grade2;
+                document.getElementById("gradeDisplay3").innerText = studentInfo.grades.grade3;
+                document.getElementById("gradeDisplay4").innerText = studentInfo.grades.grade4;
+                document.getElementById("gradeDisplay5").innerText = studentInfo.grades.grade5;
+
+                document.getElementById("results").style.display = "block";
+                document.getElementById("verification-form").style.display = "none";
+            } else {
+                alert("Informations incorrectes. Veuillez vérifier vos informations.");
+            }
         }
 
         function logout() {
@@ -296,4 +323,4 @@
         }
     </script>
 </body>
-</html>   
+</html>
