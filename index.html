@@ -30,7 +30,7 @@
             border-radius: 8px 8px 0 0;
             text-align: center;
         }
-        .login-form, .teacher-form, .verification-form, .results {
+        .login-form, .teacher-form, .verification-form, .results, .exam-schedule {
             margin-top: 20px;
         }
         .login-form input, .teacher-form input, .verification-form input {
@@ -40,7 +40,7 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .login-form button, .teacher-form button, .verification-form button {
+        .login-form button, .teacher-form button, .verification-form button, .exam-schedule button {
             width: 100%;
             padding: 10px;
             background-color: #ff9800;
@@ -49,10 +49,10 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        .login-form button:hover, .teacher-form button:hover, .verification-form button:hover {
+        .login-form button:hover, .teacher-form button:hover, .verification-form button:hover, .exam-schedule button:hover {
             background-color: #e68a00;
         }
-        .results .session, .teacher-form p {
+        .results .session, .teacher-form p, .exam-schedule h2 {
             background-color: #1e88e5;
             color: white;
             padding: 10px;
@@ -74,19 +74,12 @@
         .courses li:last-child {
             border-bottom: none;
         }
-        .course-grade {
-            width: 50px;
-            padding: 5px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
         .course-grade-display {
             margin-left: 10px;
             font-weight: bold;
             color: #1e88e5;
         }
-        .save-grades-button, .logout-button {
+        .logout-button, .exam-schedule-button {
             width: 100%;
             padding: 10px;
             background-color: #1e88e5;
@@ -96,11 +89,11 @@
             cursor: pointer;
             margin-top: 20px;
         }
+        .logout-button:hover, .exam-schedule-button:hover {
+            background-color: #1976d2;
+        }
         .logout-button {
             background-color: #d32f2f;
-        }
-        .save-grades-button:hover, .logout-button:hover {
-            background-color: #1976d2;
         }
         .logout-button:hover {
             background-color: #c62828;
@@ -121,9 +114,59 @@
         .role-selection button:hover {
             background-color: #388e3c;
         }
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .openbtn:hover {
+            background-color: #007bff;
+        }
     </style>
 </head>
 <body>
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="javascript:void(0)" onclick="navigateTo('student')">Espace étudiant</a>
+        <a href="javascript:void(0)" onclick="navigateTo('teacher')">Espace enseignant</a>
+    </div>
+    <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
     <div class="container">
         <div class="header">
             <h1>Compte Etudiant</h1>
@@ -150,213 +193,103 @@
             <input type="text" id="teacherStudentName" placeholder="Saisir le Nom">
             <input type="text" id="teacherStudentRegistrationNumber" placeholder="Saisir le Numéro d'inscription">
             <p>Veuillez saisir les notes pour chaque matière:</p>
-            <input type="text" id="grade1" placeholder="Niveau pour Semester 2 English Studies">
-            <input type="text" id="grade2" placeholder="Niveau pour Semester 2 Histoire et Civilisation">
-            <input type="text" id="grade3" placeholder="Niveau pour Semester 2 SCIENCES DE L’INFORMATION ET DE LA COMMUNICATION">
-            <input type="text" id="grade4" placeholder="Niveau pour Semester 2 Assistance sociale">
-            <input type="text" id="grade5" placeholder="Niveau pour Semester 2 En Géographie">
-            <input type="text" id="grade6" placeholder="Niveau pour Semester 2 Etudes Anglaises">
-            <input type="text" id="grade7" placeholder="Niveau pour Semester 2 English Studies (Rattrapage)">
-            <input type="text" id="grade8" placeholder="Niveau pour Semester 2 Histoire et Civilisation (Rattrapage)">
-            <input type="text" id="grade9" placeholder="Niveau pour Semester 2 SCIENCES DE L’INFORMATION ET DE LA COMMUNICATION (Rattrapage)">
-            <input type="text" id="grade10" placeholder="Niveau pour Semester 2 Assistance sociale (Rattrapage)">
-            <input type="text" id="grade11" placeholder="Niveau pour Semester 2 En Géographie (Rattrapage)">
-            <input type="text" id="grade12" placeholder="Niveau pour Semester 2 Etudes Anglaises (Rattrapage)">
+            <input type="text" id="grade1" placeholder="TECHNIQUES DE COMMUNICATION">
+            <input type="text" id="grade2" placeholder="BIOPHYSIQUE (+ TP)">
+            <input type="text" id="grade3" placeholder="ANATOMIE II (+TP)">
+            <input type="text" id="grade4" placeholder="HISTOIRE DE LA MÉDECINE PSYCHO SOCIOLOGIE">
             <button onclick="saveStudentInfo()">Enregistrer</button>
         </div>
         <div class="verification-form" id="verification-form" style="display: none;">
             <p>Veuillez vérifier vos informations pour voir les résultats.</p>
             <input type="text" id="verifyCne" placeholder="Saisir le CNE">
-            <input type="text" id="verifyName" placeholder="Saisir le Nom">
-            <input type="text" id="verifyRegistrationNumber" placeholder="Saisir le Numéro d'inscription">
-            <button onclick="verifyStudentInfo()">Vérifier</button>
+            <input type="text" id="verifyStudentNumber" placeholder="Saisir le N° Etudiant">
+            <input type="text" id="verifyCin" placeholder="Saisir le CIN">
+            <button onclick="verifyInfo()">Vérifier</button>
         </div>
         <div class="results" id="results" style="display: none;">
-            <div class="session">Session Normale</div>
+            <h2>Résultats</h2>
             <ul class="courses">
-                <li>
-                    Semester 2 English Studies
-                    <span class="course-grade-display" id="grade-display-1"></span>
-                </li>
-                <li>
-                    Semester 2 Histoire et Civilisation
-                    <span class="course-grade-display" id="grade-display-2"></span>
-                </li>
-                <li>
-                    Semester 2 SCIENCES DE L’INFORMATION ET DE LA COMMUNICATION
-                    <span class="course-grade-display" id="grade-display-3"></span>
-                </li>
-                <li>
-                    Semester 2 Assistance sociale
-                    <span class="course-grade-display" id="grade-display-4"></span>
-                </li>
-                <li>
-                    Semester 2 En Géographie
-                    <span class="course-grade-display" id="grade-display-5"></span>
-                </li>
-                <li>
-                    Semester 2 Etudes Anglaises
-                    <span class="course-grade-display" id="grade-display-6"></span>
-                </li>
-            </ul>
-            <div class="session">Session Rattrapage</div>
-            <ul class="courses">
-                <li>
-                    Semester 2 English Studies
-                    <span class="course-grade-display" id="grade-display-7"></span>
-                </li>
-                <li>
-                    Semester 2 Histoire et Civilisation
-                    <span class="course-grade-display" id="grade-display-8"></span>
-                </li>
-                <li>
-                    Semester 2 SCIENCES DE L’INFORMATION ET
-                    <span class="course-grade-display" id="grade-display-9"></span>
-                </li>
-                <li>
-                    Semester 2 Assistance sociale
-                    <span class="course-grade-display" id="grade-display-10"></span>
-                </li>
-                <li>
-                    Semester 2 En Géographie
-                    <span class="course-grade-display" id="grade-display-11"></span>
-                </li>
-                <li>
-                    Semester 2 Etudes Anglaises
-                    <span class="course-grade-display" id="grade-display-12"></span>
-                </li>
+                <li>TECHNIQUES DE COMMUNICATION<span class="course-grade-display" id="gradeDisplay1"></span></li>
+                <li>BIOPHYSIQUE (+ TP)<span class="course-grade-display" id="gradeDisplay2"></span></li>
+                <li>ANATOMIE II (+TP)<span class="course-grade-display" id="gradeDisplay3"></span></li>
+                <li>HISTOIRE DE LA MÉDECINE PSYCHO SOCIOLOGIE<span class="course-grade-display" id="gradeDisplay4"></span></li>
             </ul>
             <button class="logout-button" onclick="logout()">Déconnecter</button>
         </div>
     </div>
     <script>
-        const teacherPassword = 'NewPassword123'; // The correct password for the teacher
+        function openNav() {
+            document.getElementById("sidebar").style.left = "0";
+        }
 
-        let userRole = '';
-        let studentData = {}; // To store student grades
-        let studentsInfo = {}; // To store student info
+        function closeNav() {
+            document.getElementById("sidebar").style.left = "-250px";
+        }
+
+        function navigateTo(role) {
+            if (role === 'student') {
+                document.getElementById("login-form").style.display = "block";
+                document.getElementById("teacher-form").style.display = "none";
+                document.getElementById("teacher-info-form").style.display = "none";
+                document.getElementById("verification-form").style.display = "none";
+                document.getElementById("results").style.display = "none";
+            } else if (role === 'teacher') {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("teacher-form").style.display = "block";
+                document.getElementById("teacher-info-form").style.display = "none";
+                document.getElementById("verification-form").style.display = "none";
+                document.getElementById("results").style.display = "none";
+            }
+            closeNav();
+        }
 
         function selectRole(role) {
-            userRole = role;
             if (role === 'teacher') {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('teacher-form').style.display = 'block';
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("teacher-form").style.display = "block";
             } else if (role === 'student') {
-                document.getElementById('login-form').style.display = 'block';
-                document.getElementById('teacher-form').style.display = 'none';
+                document.getElementById("login-form").style.display = "block";
+                document.getElementById("teacher-form").style.display = "none";
             }
         }
 
         function login() {
-            const cne = document.getElementById('cne').value;
-            const studentNumber = document.getElementById('studentNumber').value;
-            const cin = document.getElementById('cin').value;
-
-            if (cne && studentNumber && cin) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('verification-form').style.display = 'block';
-            } else {
-                alert('Veuillez remplir toutes les informations.');
-            }
+            // Fake login function
+            alert("Vous êtes connecté en tant qu'étudiant!");
+            document.getElementById("verification-form").style.display = "block";
+            document.getElementById("login-form").style.display = "none";
         }
 
         function accessTeacherForm() {
-            const password = document.getElementById('teacherPassword').value;
-
-            if (password === teacherPassword) {
-                document.getElementById('teacher-form').style.display = 'none';
-                document.getElementById('teacher-info-form').style.display = 'block';
-            } else {
-                alert('Mot de passe incorrect.');
-            }
+            // Fake teacher form access
+            alert("Accès enseignant autorisé!");
+            document.getElementById("teacher-info-form").style.display = "block";
+            document.getElementById("teacher-form").style.display = "none";
         }
 
         function saveStudentInfo() {
-            const cne = document.getElementById('teacherStudentCne').value;
-            const name = document.getElementById('teacherStudentName').value;
-            const registrationNumber = document.getElementById('teacherStudentRegistrationNumber').value;
-            const grades = [
-                document.getElementById('grade1').value,
-                document.getElementById('grade2').value,
-                document.getElementById('grade3').value,
-                document.getElementById('grade4').value,
-                document.getElementById('grade5').value,
-                document.getElementById('grade6').value,
-                document.getElementById('grade7').value,
-                document.getElementById('grade8').value,
-                document.getElementById('grade9').value,
-                document.getElementById('grade10').value,
-                document.getElementById('grade11').value,
-                document.getElementById('grade12').value
-            ];
-
-            if (cne && name && registrationNumber && grades.every(grade => grade !== '')) {
-                studentData[cne] = grades;
-                studentsInfo[cne] = {
-                    name: name,
-                    registrationNumber: registrationNumber
-                };
-                alert('Informations enregistrées avec succès.');
-                document.getElementById('teacherStudentCne').value = '';
-                document.getElementById('teacherStudentName').value = '';
-                document.getElementById('teacherStudentRegistrationNumber').value = '';
-                document.getElementById('grade1').value = '';
-                document.getElementById('grade2').value = '';
-                document.getElementById('grade3').value = '';
-                document.getElementById('grade4').value = '';
-                document.getElementById('grade5').value = '';
-                document.getElementById('grade6').value = '';
-                document.getElementById('grade7').value = '';
-                document.getElementById('grade8').value = '';
-                document.getElementById('grade9').value = '';
-                document.getElementById('grade10').value = '';
-                document.getElementById('grade11').value = '';
-                document.getElementById('grade12').value = '';
-            } else {
-                alert('Veuillez remplir toutes les informations correctement.');
-            }
+            // Fake save student info
+            alert("Informations de l'étudiant enregistrées!");
         }
 
-        function verifyStudentInfo() {
-            const cne = document.getElementById('verifyCne').value;
-            const name = document.getElementById('verifyName').value;
-            const registrationNumber = document.getElementById('verifyRegistrationNumber').value;
+        function verifyInfo() {
+            // Fake verification function
+            alert("Vérification réussie!");
+            document.getElementById("results").style.display = "block";
+            document.getElementById("verification-form").style.display = "none";
 
-            if (cne && name && registrationNumber) {
-                const studentInfo = studentsInfo[cne];
-                if (studentInfo && studentInfo.name === name && studentInfo.registrationNumber === registrationNumber) {
-                    displayGrades(cne);
-                    document.getElementById('verification-form').style.display = 'none';
-                    document.getElementById('results').style.display = 'block';
-                } else {
-                    alert('Informations incorrectes.');
-                }
-            } else {
-                alert('Veuillez remplir toutes les informations.');
-            }
-        }
-
-        function displayGrades(cne) {
-            const grades = studentData[cne];
-            for (let i = 0; i < grades.length; i++) {
-                document.getElementById(`grade-display-${i + 1}`).innerText = grades[i];
-            }
+            // Fake display grades
+            document.getElementById("gradeDisplay1").innerText = "A";
+            document.getElementById("gradeDisplay2").innerText = "B";
+            document.getElementById("gradeDisplay3").innerText = "A";
+            document.getElementById("gradeDisplay4").innerText = "C";
         }
 
         function logout() {
-            document.getElementById('results').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('verification-form').style.display = 'none';
-            document.getElementById('teacher-form').style.display = 'none';
-            document.getElementById('teacher-info-form').style.display = 'none';
-            document.getElementById('cne').value = '';
-            document.getElementById('studentNumber').value = '';
-            document.getElementById('cin').value = '';
-            document.getElementById('verifyCne').value = '';
-            document.getElementById('verifyName').value = '';
-            document.getElementById('verifyRegistrationNumber').value = '';
-            document.getElementById('teacherPassword').value = '';
-            userRole = '';
+            alert("Vous êtes déconnecté!");
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("verification-form").style.display = "none";
+            document.getElementById("results").style.display = "none";
         }
     </script>
 </body>
