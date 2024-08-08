@@ -140,6 +140,11 @@
             <button onclick="login()">Connecter</button>
         </div>
         <div class="teacher-form" id="teacher-form" style="display: none;">
+            <p>Veuillez saisir le mot de passe pour accéder à la saisie des informations des étudiants:</p>
+            <input type="password" id="teacherPassword" placeholder="Saisir le mot de passe">
+            <button onclick="accessTeacherForm()">Accéder</button>
+        </div>
+        <div class="teacher-info-form" id="teacher-info-form" style="display: none;">
             <p>Veuillez saisir les informations des étudiants et cliquer sur Enregistrer.</p>
             <input type="text" id="teacherStudentCne" placeholder="Saisir le CNE">
             <input type="text" id="teacherStudentName" placeholder="Saisir le Nom">
@@ -206,7 +211,7 @@
                 </li>
                 <li>
                     Semester 2 SCIENCES DE L’INFORMATION ET
-                <span class="course-grade-display" id="grade-display-9"></span>
+                    <span class="course-grade-display" id="grade-display-9"></span>
                 </li>
                 <li>
                     Semester 2 Assistance sociale
@@ -225,14 +230,21 @@
         </div>
     </div>
     <script>
+        const teacherPassword = 'NewPassword123'; // The correct password for the teacher
+
         let userRole = '';
         let studentData = {}; // To store student grades
         let studentsInfo = {}; // To store student info
 
         function selectRole(role) {
             userRole = role;
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('teacher-form').style.display = role === 'teacher' ? 'block' : 'none';
+            if (role === 'teacher') {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('teacher-form').style.display = 'block';
+            } else if (role === 'student') {
+                document.getElementById('login-form').style.display = 'block';
+                document.getElementById('teacher-form').style.display = 'none';
+            }
         }
 
         function login() {
@@ -245,6 +257,17 @@
                 document.getElementById('verification-form').style.display = 'block';
             } else {
                 alert('Veuillez remplir toutes les informations.');
+            }
+        }
+
+        function accessTeacherForm() {
+            const password = document.getElementById('teacherPassword').value;
+
+            if (password === teacherPassword) {
+                document.getElementById('teacher-form').style.display = 'none';
+                document.getElementById('teacher-info-form').style.display = 'block';
+            } else {
+                alert('Mot de passe incorrect.');
             }
         }
 
@@ -325,14 +348,16 @@
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('verification-form').style.display = 'none';
             document.getElementById('teacher-form').style.display = 'none';
+            document.getElementById('teacher-info-form').style.display = 'none';
             document.getElementById('cne').value = '';
             document.getElementById('studentNumber').value = '';
             document.getElementById('cin').value = '';
             document.getElementById('verifyCne').value = '';
             document.getElementById('verifyName').value = '';
             document.getElementById('verifyRegistrationNumber').value = '';
+            document.getElementById('teacherPassword').value = '';
             userRole = '';
         }
     </script>
 </body>
-</html>    
+</html>
