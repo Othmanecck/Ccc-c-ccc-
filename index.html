@@ -212,6 +212,7 @@
             </ul>
             <button class="logout-button" onclick="logout()">Déconnecter</button>
         </div>
+    </div>
     <script>
         function openNav() {
             document.getElementById("sidebar").style.left = "0";
@@ -249,31 +250,46 @@
         }
 
         function login() {
-            // Fake login function
-            alert("Vous êtes connecté en tant qu'étudiant!");
-            document.getElementById("verification-form").style.display = "block";
-            document.getElementById("login-form").style.display = "none";
+            var cne = document.getElementById("cne").value;
+            var studentNumber = document.getElementById("studentNumber").value;
+            var cin = document.getElementById("cin").value;
+
+            // Check if student information exists in localStorage
+            var students = JSON.parse(localStorage.getItem("students")) || [];
+            var student = students.find(s => s.cne === cne && s.registrationNumber === studentNumber && s.cin === cin);
+
+            if (student) {
+                alert("Vous êtes connecté en tant qu'étudiant!");
+                document.getElementById("results").style.display = "block";
+                document.getElementById("verification-form").style.display = "none";
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("gradeDisplay1").innerText = student.grades.grade1;
+                document.getElementById("gradeDisplay2").innerText = student.grades.grade2;
+                document.getElementById("gradeDisplay3").innerText = student.grades.grade3;
+                document.getElementById("gradeDisplay4").innerText = student.grades.grade4;
+                document.getElementById("gradeDisplay5").innerText = student.grades.grade5;
+            } else {
+                alert("Informations incorrectes. Veuillez vérifier vos informations.");
+            }
         }
 
         function accessTeacherForm() {
             var password = document.getElementById("teacherPassword").value;
             if (password === "password123") {
-                // Password is correct
                 alert("Accès enseignant autorisé!");
                 document.getElementById("teacher-info-form").style.display = "block";
                 document.getElementById("teacher-form").style.display = "none";
             } else {
-                // Password is incorrect
                 alert("Mot de passe incorrect!");
             }
         }
 
         function saveStudentInfo() {
-            // Get student information from inputs
             var studentInfo = {
                 cne: document.getElementById("teacherStudentCne").value,
                 name: document.getElementById("teacherStudentName").value,
                 registrationNumber: document.getElementById("teacherStudentRegistrationNumber").value,
+                cin: document.getElementById("teacherStudentCne").value,
                 grades: {
                     grade1: document.getElementById("grade1").value,
                     grade2: document.getElementById("grade2").value,
@@ -284,35 +300,19 @@
             };
 
             // Save student information to localStorage
-            localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
+            var students = JSON.parse(localStorage.getItem("students")) || [];
+            var existingStudentIndex = students.findIndex(s => s.cne === studentInfo.cne);
+            if (existingStudentIndex !== -1) {
+                // Update existing student information
+                students[existingStudentIndex] = studentInfo;
+            } else {
+                // Add new student information
+                students.push(studentInfo);
+            }
+            localStorage.setItem("students", JSON.stringify(students));
 
             alert("Informations de l'étudiant enregistrées!");
-        }
-
-        function verifyInfo() {
-            // Get saved student information from localStorage
-            var studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
-
-            // Validate student info (this is a placeholder for actual validation)
-            if (studentInfo && 
-                document.getElementById("verifyCne").value === studentInfo.cne &&
-                document.getElementById("verifyStudentNumber").value === studentInfo.registrationNumber &&
-                document.getElementById("verifyCin").value === studentInfo.cne) {
-
-                alert("Vérification réussie!");
-
-                // Display grades
-                document.getElementById("gradeDisplay1").innerText = studentInfo.grades.grade1;
-                document.getElementById("gradeDisplay2").innerText = studentInfo.grades.grade2;
-                document.getElementById("gradeDisplay3").innerText = studentInfo.grades.grade3;
-                document.getElementById("gradeDisplay4").innerText = studentInfo.grades.grade4;
-                document.getElementById("gradeDisplay5").innerText = studentInfo.grades.grade5;
-
-                document.getElementById("results").style.display = "block";
-                document.getElementById("verification-form").style.display = "none";
-            } else {
-                alert("Informations incorrectes. Veuillez vérifier vos informations.");
-            }
+            document.getElementById("teacher-info-form").reset();
         }
 
         function logout() {
