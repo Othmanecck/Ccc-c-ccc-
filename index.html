@@ -193,10 +193,11 @@
             <input type="text" id="teacherStudentName" placeholder="Saisir le Nom">
             <input type="text" id="teacherStudentRegistrationNumber" placeholder="Saisir le Numéro d'inscription">
             <p>Veuillez saisir les notes pour chaque matière:</p>
-            <input type="text" id="grade1" placeholder="TECHNIQUES DE COMMUNICATION">
-            <input type="text" id="grade2" placeholder="BIOPHYSIQUE (+ TP)">
-            <input type="text" id="grade3" placeholder="ANATOMIE II (+TP)">
-            <input type="text" id="grade4" placeholder="HISTOIRE DE LA MÉDECINE PSYCHO SOCIOLOGIE">
+            <input type="number" id="grade1" placeholder="Niveau pour Techniques de Communication">
+            <input type="number" id="grade2" placeholder="Niveau pour Biophysique (+ TP)">
+            <input type="number" id="grade3" placeholder="Niveau pour Anatomie II (+TP)">
+            <input type="number" id="grade4" placeholder="Niveau pour Histoire de la Médecine">
+            <input type="number" id="grade5" placeholder="Niveau pour Psychologie Sociologie">
             <button onclick="saveStudentInfo()">Enregistrer</button>
         </div>
         <div class="verification-form" id="verification-form" style="display: none;">
@@ -209,10 +210,11 @@
         <div class="results" id="results" style="display: none;">
             <h2>Résultats</h2>
             <ul class="courses">
-                <li>TECHNIQUES DE COMMUNICATION<span class="course-grade-display" id="gradeDisplay1"></span></li>
-                <li>BIOPHYSIQUE (+ TP)<span class="course-grade-display" id="gradeDisplay2"></span></li>
-                <li>ANATOMIE II (+TP)<span class="course-grade-display" id="gradeDisplay3"></span></li>
-                <li>HISTOIRE DE LA MÉDECINE PSYCHO SOCIOLOGIE<span class="course-grade-display" id="gradeDisplay4"></span></li>
+                <li>Techniques de Communication<span class="course-grade-display" id="gradeDisplay1"></span></li>
+                <li>Biophysique (+ TP)<span class="course-grade-display" id="gradeDisplay2"></span></li>
+                <li>Anatomie II (+TP)<span class="course-grade-display" id="gradeDisplay3"></span></li>
+                <li>Histoire de la Médecine<span class="course-grade-display" id="gradeDisplay4"></span></li>
+             <li>Psychologie Sociologie<span class="course-grade-display" id="gradeDisplay5"></span></li>
             </ul>
             <button class="logout-button" onclick="logout()">Déconnecter</button>
         </div>
@@ -278,11 +280,12 @@
             document.getElementById("results").style.display = "block";
             document.getElementById("verification-form").style.display = "none";
 
-            // Fake display grades
-            document.getElementById("gradeDisplay1").innerText = "A";
-            document.getElementById("gradeDisplay2").innerText = "B";
-            document.getElementById("gradeDisplay3").innerText = "A";
-            document.getElementById("gradeDisplay4").innerText = "C";
+            // Fake display grades (the same as entered by the teacher)
+            document.getElementById("gradeDisplay1").innerText = document.getElementById("grade1").value;
+            document.getElementById("gradeDisplay2").innerText = document.getElementById("grade2").value;
+            document.getElementById("gradeDisplay3").innerText = document.getElementById("grade3").value;
+            document.getElementById("gradeDisplay4").innerText = document.getElementById("grade4").value;
+            document.getElementById("gradeDisplay5").innerText = document.getElementById("grade5").value;
         }
 
         function logout() {
@@ -293,4 +296,4 @@
         }
     </script>
 </body>
-</html>
+</html>   
