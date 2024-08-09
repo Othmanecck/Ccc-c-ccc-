@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #e3f2fd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,18 +18,18 @@
         }
         .container {
             background-color: #fff;
-            width: 80%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 700px;
             margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 25px;
         }
         .header {
             background-color: #1e88e5;
             color: white;
-            padding: 10px;
-            border-radius: 8px 8px 0 0;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
             text-align: center;
         }
         .login-form, .teacher-form, .verification-form, .results {
@@ -35,22 +37,30 @@
         }
         .login-form input, .teacher-form input, .verification-form input {
             width: calc(100% - 20px);
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .login-form input:focus, .teacher-form input:focus, .verification-form input:focus {
+            border-color: #1e88e5;
+            box-shadow: 0 0 8px rgba(30, 136, 229, 0.2);
         }
         .login-form button, .teacher-form button, .verification-form button {
             width: 100%;
-            padding: 10px;
-            background-color: #ff9800;
+            padding: 12px;
+            background-color: #1e88e5;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
         .login-form button:hover, .teacher-form button:hover, .verification-form button:hover {
-            background-color: #e68a00;
+            background-color: #1565c0;
         }
         .results .session {
             background-color: #1e88e5;
@@ -65,11 +75,15 @@
             padding: 0;
         }
         .courses li {
-            padding: 8px;
+            padding: 10px;
             border-bottom: 1px solid #ccc;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: background-color 0.3s ease;
+        }
+        .courses li:hover {
+            background-color: #f4f7f9;
         }
         .courses li:last-child {
             border-bottom: none;
@@ -81,34 +95,39 @@
         }
         .logout-button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #1e88e5;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
         .logout-button:hover {
-            background-color: #1976d2;
+            background-color: #1565c0;
         }
         .role-selection {
             margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
         }
         .role-selection button {
             width: calc(50% - 10px);
-            padding: 10px;
-            margin: 5px;
+            padding: 12px;
             background-color: #4caf50;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
         .role-selection button:hover {
             background-color: #388e3c;
         }
-        /* Sidebar styles */
         .sidebar {
             height: 100%;
             width: 250px;
@@ -117,17 +136,17 @@
             left: -250px;
             background-color: #333;
             overflow-x: hidden;
-            transition: 0.5s;
+            transition: all 0.5s ease;
             padding-top: 60px;
-            z-index: 1;
+            z-index: 1000;
         }
         .sidebar a {
-            padding: 10px 15px;
+            padding: 15px 20px;
             text-decoration: none;
             font-size: 18px;
             color: white;
             display: block;
-            transition: 0.3s;
+            transition: background-color 0.3s ease;
         }
         .sidebar a:hover {
             background-color: #575757;
@@ -145,20 +164,21 @@
             background-color: #1e88e5;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 10px 20px;
+            border-radius: 5px;
             margin-top: 20px;
+            transition: background-color 0.3s ease;
         }
         .openbtn:hover {
-            background-color: #007bff;
+            background-color: #1565c0;
         }
     </style>
 </head>
 <body>
     <div id="sidebar" class="sidebar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="javascript:void(0)" onclick="navigateTo('student')">Espace étudiant</a>
-        <a href="javascript:void(0)" onclick="navigateTo('teacher')">Espace enseignant</a>
+        <a href="javascript:void(0)" onclick="navigateTo('student')"><i class="fa fa-user"></i> Espace étudiant</a>
+        <a href="javascript:void(0)" onclick="navigateTo('teacher')"><i class="fa fa-chalkboard-teacher"></i> Espace enseignant</a>
     </div>
     <button class="openbtn" onclick="openNav()">&#9776; Menu</button>
     <div class="container">
@@ -184,35 +204,26 @@
         <div class="teacher-info-form" id="teacher-info-form" style="display: none;">
             <p>Veuillez saisir les informations des étudiants et cliquer sur Enregistrer.</p>
             <input type="text" id="teacherStudentCne" placeholder="Saisir le CNE">
-            <input type="text" id="teacherStudentName" placeholder="Saisir le Nom">
-            <input type="text" id="teacherStudentRegistrationNumber" placeholder="Saisir le Numéro d'inscription">
-            <p>Veuillez saisir les notes pour chaque matière:</p>
-            <input type="number" id="grade1" placeholder="Niveau pour Techniques de Communication">
-            <input type="number" id="grade2" placeholder="Niveau pour Biophysique (+ TP)">
-            <input type="number" id="grade3" placeholder="Niveau pour Anatomie II (+TP)">
-            <input type="number" id="grade4" placeholder="Niveau pour Histoire de la Médecine">
-            <input type="number" id="grade5" placeholder="Niveau pour Psychologie Sociologie">
+            <input type="text" id="teacherStudentName" placeholder="Saisir le nom de l'étudiant">
+            <input type="text" id="teacherStudentGrade" placeholder="Saisir la note de l'étudiant">
             <button onclick="saveStudentInfo()">Enregistrer</button>
         </div>
         <div class="verification-form" id="verification-form" style="display: none;">
-            <p>Veuillez vérifier vos informations pour voir les résultats.</p>
-            <input type="text" id="verifyCne" placeholder="Saisir le CNE">
-            <input type="text" id="verifyStudentNumber" placeholder="Saisir le N° Etudiant">
-            <input type="text" id="verifyCin" placeholder="Saisir le CIN">
-            <button onclick="verifyInfo()">Vérifier</button>
+            <p>Veuillez vérifier les informations suivantes et cliquer sur Vérifier.</p>
+            <input type="text" id="verifStudentCne" placeholder="Saisir le CNE">
+            <button onclick="verifyStudent()">Vérifier</button>
         </div>
         <div class="results" id="results" style="display: none;">
-            <h2>Résultats</h2>
-            <ul class="courses">
-                <li>Techniques de Communication<span class="course-grade-display" id="gradeDisplay1"></span></li>
-                <li>Biophysique (+ TP)<span class="course-grade-display" id="gradeDisplay2"></span></li>
-                <li>Anatomie II (+TP)<span class="course-grade-display" id="gradeDisplay3"></span></li>
-                <li>Histoire de la Médecine<span class="course-grade-display" id="gradeDisplay4"></span></li>
-                <li>Psychologie Sociologie<span class="course-grade-display" id="gradeDisplay5"></span></li>
+            <h3>Résultats de l'étudiant</h3>
+            <div class="session">Session: <span id="session-name"></span></div>
+            <ul class="courses" id="courses-list">
+                <!-- Les cours et notes seront affichés ici -->
             </ul>
             <button class="logout-button" onclick="logout()">Déconnecter</button>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function openNav() {
             document.getElementById("sidebar").style.left = "0";
@@ -222,104 +233,96 @@
             document.getElementById("sidebar").style.left = "-250px";
         }
 
-        function navigateTo(role) {
-            if (role === 'student') {
-                document.getElementById("login-form").style.display = "block";
-                document.getElementById("teacher-form").style.display = "none";
-                document.getElementById("teacher-info-form").style.display = "none";
-                document.getElementById("verification-form").style.display = "none";
-                document.getElementById("results").style.display = "none";
-            } else if (role === 'teacher') {
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("teacher-form").style.display = "block";
-                document.getElementById("teacher-info-form").style.display = "none";
-                document.getElementById("verification-form").style.display = "none";
-                document.getElementById("results").style.display = "none";
-            }
-            closeNav();
-        }
-
         function selectRole(role) {
-            if (role === 'teacher') {
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("teacher-form").style.display = "block";
-            } else if (role === 'student') {
-                document.getElementById("login-form").style.display = "block";
-                document.getElementById("teacher-form").style.display = "none";
+            if (role === 'student') {
+                $('#login-form').show();
+                $('#teacher-form').hide();
+                $('#teacher-info-form').hide();
+                $('.header h1').text("Compte Etudiant");
+            } else if (role === 'teacher') {
+                $('#teacher-form').show();
+                $('#login-form').hide();
+                $('#teacher-info-form').hide();
+                $('.header h1').text("Compte Enseignant");
             }
+            $('.role-selection').hide();
         }
 
         function login() {
-            var cne = document.getElementById("cne").value;
-            var studentNumber = document.getElementById("studentNumber").value;
-            var cin = document.getElementById("cin").value;
+            let cne = $('#cne').val();
+            let studentNumber = $('#studentNumber').val();
+            let cin = $('#cin').val();
 
-            // Check if student information exists in localStorage
-            var students = JSON.parse(localStorage.getItem("students")) || [];
-            var student = students.find(s => s.cne === cne && s.registrationNumber === studentNumber && s.cin === cin);
-
-            if (student) {
-                alert("Vous êtes connecté en tant qu'étudiant!");
-                document.getElementById("results").style.display = "block";
-                document.getElementById("verification-form").style.display = "none";
-                document.getElementById("login-form").style.display = "none";
-                document.getElementById("gradeDisplay1").innerText = student.grades.grade1;
-                document.getElementById("gradeDisplay2").innerText = student.grades.grade2;
-                document.getElementById("gradeDisplay3").innerText = student.grades.grade3;
-                document.getElementById("gradeDisplay4").innerText = student.grades.grade4;
-                document.getElementById("gradeDisplay5").innerText = student.grades.grade5;
+            // Validation simple (peut être améliorée selon les besoins)
+            if (cne && studentNumber && cin) {
+                alert("Connexion réussie");
+                $('#login-form').hide();
+                $('#verification-form').show();
             } else {
-                alert("Informations incorrectes. Veuillez vérifier vos informations.");
+                alert("Veuillez remplir tous les champs.");
             }
         }
 
         function accessTeacherForm() {
-            var password = document.getElementById("teacherPassword").value;
-            if (password === "password123") {
-                alert("Accès enseignant autorisé!");
-                document.getElementById("teacher-info-form").style.display = "block";
-                document.getElementById("teacher-form").style.display = "none";
+            let password = $('#teacherPassword').val();
+
+            // Validation simple du mot de passe (à améliorer selon les besoins)
+            if (password === "admin123") {
+                $('#teacher-form').hide();
+                $('#teacher-info-form').show();
             } else {
-                alert("Mot de passe incorrect!");
+                alert("Mot de passe incorrect.");
             }
         }
 
         function saveStudentInfo() {
-            var studentInfo = {
-                cne: document.getElementById("teacherStudentCne").value,
-                name: document.getElementById("teacherStudentName").value,
-                registrationNumber: document.getElementById("teacherStudentRegistrationNumber").value,
-                cin: document.getElementById("teacherStudentCne").value,
-                grades: {
-                    grade1: document.getElementById("grade1").value,
-                    grade2: document.getElementById("grade2").value,
-                    grade3: document.getElementById("grade3").value,
-                    grade4: document.getElementById("grade4").value,
-                    grade5: document.getElementById("grade5").value
-                }
-            };
+            let studentCne = $('#teacherStudentCne').val();
+            let studentName = $('#teacherStudentName').val();
+            let studentGrade = $('#teacherStudentGrade').val();
 
-            // Save student information to localStorage
-            var students = JSON.parse(localStorage.getItem("students")) || [];
-            var existingStudentIndex = students.findIndex(s => s.cne === studentInfo.cne);
-            if (existingStudentIndex !== -1) {
-                // Update existing student information
-                students[existingStudentIndex] = studentInfo;
+            if (studentCne && studentName && studentGrade) {
+                alert("Informations de l'étudiant enregistrées.");
+                $('#teacherStudentCne').val('');
+                $('#teacherStudentName').val('');
+                $('#teacherStudentGrade').val('');
             } else {
-                // Add new student information
-                students.push(studentInfo);
+                alert("Veuillez remplir tous les champs.");
             }
-            localStorage.setItem("students", JSON.stringify(students));
+        }
 
-            alert("Informations de l'étudiant enregistrées!");
-            document.getElementById("teacher-info-form").reset();
+        function verifyStudent() {
+            let verifStudentCne = $('#verifStudentCne').val();
+
+            if (verifStudentCne) {
+                // Simulation de la récupération des informations
+                let courses = [
+                    { name: "Mathématiques", grade: "14" },
+                    { name: "Physique", grade: "16" },
+                    { name: "Informatique", grade: "18" }
+                ];
+
+                $('#verification-form').hide();
+                $('#results').show();
+                $('#session-name').text("2023/2024");
+                $('#courses-list').empty();
+                
+                courses.forEach(course => {
+                    $('#courses-list').append(`<li>${course.name} <span class="course-grade-display">${course.grade}</span></li>`);
+                });
+            } else {
+                alert("Veuillez entrer le CNE.");
+            }
+        }
+
+        function navigateTo(page) {
+            closeNav();
+            selectRole(page);
         }
 
         function logout() {
-            alert("Vous êtes déconnecté!");
-            document.getElementById("login-form").style.display = "block";
-            document.getElementById("verification-form").style.display = "none";
-            document.getElementById("results").style.display = "none";
+            alert("Déconnexion réussie.");
+            $('#results').hide();
+            $('.role-selection').show();
         }
     </script>
 </body>
